@@ -1628,14 +1628,15 @@ var polyglot = {
                 _ref4$ext = _ref4.ext,
                 ext = _ref4$ext === undefined ? '.json' : _ref4$ext;
 
+            var that = this;
             return new Promise(function (resolve, reject) {
               lang = lang === 'auto' ? this.getLang() : lang;
               if (lang !== options.defaultLanguage) {
                 axios.get(baseURL + '/' + lang + ext).then(function (req) {
                   var locale = req.data;
-                  this.setLocale({ lang: lang, locale: locale });
-                  this.setLang({ lang: lang });
-                  this.addLangInLanguagesAvailable({ lang: lang });
+                  that.setLocale({ lang: lang, locale: locale });
+                  that.setLang({ lang: lang });
+                  that.addLangInLanguagesAvailable({ lang: lang });
                   resolve();
                 });
               }
