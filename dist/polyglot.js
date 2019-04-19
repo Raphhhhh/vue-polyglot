@@ -1620,8 +1620,6 @@ var polyglot = {
             return i18n.getBestLanguage(languagesAvailable, navigatorLanguage, defaultLanguage);
           },
           getLocale: function getLocale() {
-            var _this2 = this;
-
             var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
                 _ref4$baseURL = _ref4.baseURL,
                 baseURL = _ref4$baseURL === undefined ? 'i18n' : _ref4$baseURL,
@@ -1630,15 +1628,18 @@ var polyglot = {
                 _ref4$ext = _ref4.ext,
                 ext = _ref4$ext === undefined ? '.json' : _ref4$ext;
 
-            lang = lang === 'auto' ? this.getLang() : lang;
-            if (lang !== options.defaultLanguage) {
-              axios.get(baseURL + '/' + lang + ext).then(function (response) {
-                var locale = response.data;
-                _this2.setLocale({ lang: lang, locale: locale });
-                _this2.setLang({ lang: lang });
-                _this2.addLangInLanguagesAvailable({ lang: lang });
-              });
-            }
+            return new Promise(function (resolve, reject) {
+              lang = lang === 'auto' ? this.getLang() : lang;
+              if (lang !== options.defaultLanguage) {
+                axios.get(baseURL + '/' + lang + ext).then(function (req) {
+                  var locale = req.data;
+                  this.setLocale({ lang: lang, locale: locale });
+                  this.setLang({ lang: lang });
+                  this.addLangInLanguagesAvailable({ lang: lang });
+                  resolve();
+                });
+              }
+            });
           },
           _translate: function _translate(key, fallbackMessage, data) {
             return i18n.translate(this.locale, key, fallbackMessage, data);
