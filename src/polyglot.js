@@ -51,15 +51,16 @@ export default {
             return i18n.getBestLanguage(languagesAvailable, navigatorLanguage, defaultLanguage);
           },
           getLocale({baseURL = 'i18n', lang = 'auto', ext = '.json'} = {}){
+            var that = this;
             return new Promise(function(resolve, reject) {
               lang = lang === 'auto' ? this.getLang() : lang;
               if (lang !== options.defaultLanguage) {
                 axios.get(`${baseURL}/${lang}${ext}`).then(function (req) {
                   const locale = req.data;
-                  this.setLocale({lang, locale});
-                  this.setLang({lang});
-                  this.addLangInLanguagesAvailable({lang});
-                  resolve()
+                  that.setLocale({lang, locale});
+                  that.setLang({lang});
+                  that.addLangInLanguagesAvailable({lang});
+                  resolve(locale)
                 });
               }
             })
