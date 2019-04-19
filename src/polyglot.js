@@ -53,7 +53,7 @@ export default {
           async getLocale({baseURL = 'i18n', lang = 'auto', ext = '.json'} = {}){
             lang = lang === 'auto' ? this.getLang() : lang;
             if (lang !== options.defaultLanguage) {
-              await req = axios.get(`${baseURL}/${lang}${ext}`)                
+              req = await axios.get(`${baseURL}/${lang}${ext}`)                
               const locale = req.data;
               this.setLocale({lang, locale});
               this.setLang({lang});
