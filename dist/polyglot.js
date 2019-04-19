@@ -1637,7 +1637,7 @@ var polyglot = {
                   that.setLocale({ lang: lang, locale: locale });
                   that.setLang({ lang: lang });
                   that.addLangInLanguagesAvailable({ lang: lang });
-                  resolve();
+                  resolve(locale);
                 });
               }
             });
