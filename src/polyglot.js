@@ -50,15 +50,19 @@ export default {
             const defaultLanguage = options.defaultLanguage;
             return i18n.getBestLanguage(languagesAvailable, navigatorLanguage, defaultLanguage);
           },
-          async getLocale({baseURL = 'i18n', lang = 'auto', ext = '.json'} = {}){
-            lang = lang === 'auto' ? this.getLang() : lang;
-            if (lang !== options.defaultLanguage) {
-              req = await axios.get(`${baseURL}/${lang}${ext}`)                
-              const locale = req.data;
-              this.setLocale({lang, locale});
-              this.setLang({lang});
-              this.addLangInLanguagesAvailable({lang});                
-            }
+          getLocale({baseURL = 'i18n', lang = 'auto', ext = '.json'} = {}){
+            return new Promise(function(resolve, reject) {
+              lang = lang === 'auto' ? this.getLang() : lang;
+              if (lang !== options.defaultLanguage) {
+                axios.get(`${baseURL}/${lang}${ext}`).then(function (req) {
+                  const locale = req.data;
+                  this.setLocale({lang, locale});
+                  this.setLang({lang});
+                  this.addLangInLanguagesAvailable({lang});
+                  resolve()
+                });
+              }
+            })
           },
           _translate(key, fallbackMessage, data) {
             return i18n.translate(this.locale, key, fallbackMessage, data);
